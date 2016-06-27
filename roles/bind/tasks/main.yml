@@ -59,6 +59,14 @@
   - restart bind9
 
 #  Aqui elimina el servicio
-
+- name: main | uninstall bind packages
+  apt: >
+    pkg={{ item }} 
+    state=absent
+    purge=yes
+    force=yes
+  with_items:
+    - bind9*
+  sudo: no
  
 
