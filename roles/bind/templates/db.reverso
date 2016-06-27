@@ -1,0 +1,23 @@
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	ns1.{{server_domain}}. root.{{server_domain}}. (
+			      1		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+
+;Glue para los NS
+1		IN		NS		ns1.{{server_domain}}.
+#2		IN		NS		ns2.{{server_domain2}}.
+#3		IN		NS		ns3.{{server_domain3}}.
+
+
+;Basico de los reversos
+1		IN		PTR		{{server_domain}}.
+2		IN		PTR		{{server_domain2}}.
+3		IN		PTR		{{server_domain3}}.
+
+

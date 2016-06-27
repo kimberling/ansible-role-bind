@@ -1,0 +1,39 @@
+---
+#Variables para dns
+
+#Variable de los dominios de los servidores dns y servidor de correo
+server_domain: domain.com
+server_domain2: domain2.com
+server_domain3: domain3.com
+server_mail: mail.domain.com
+server_reverso: reverso
+
+#Variable de los nombres de los servidores dns, servidor de correo y tres servidores extra
+name_server_domain: domain
+name_server_domain2: domain2
+name_server_domain3: domain3
+name_server_mail: mail
+name_server_1: caracas
+name_server_2: valencia
+name_server_3: maracay
+
+#Variable de las IP de los servidores dns, servidor de correo y tres servidores extra
+server_ip_ns: 127.0.0.1
+server_ip_ns2: 127.0.0.2
+server_ip_ns3: 127.0.0.3
+server_ip_mail: 127.0.0.4
+server_ip_1: 127.0.0.5
+server_ip_2: 127.0.0.6
+server_ip_3: 127.0.0.7
+
+#Variable de los nombres de las mv del servidor 1
+name_mv1_server1: margarita
+name_mv2_server1: roques
+
+#Variable de los nombres de las mv del servidor 2
+name_mv1_server2: tachira
+name_mv2_server2: merida
+
+#Variable de los nombres de las mv del servidor 3
+name_mv1_server3: barinas
+name_mv2_server3: apure

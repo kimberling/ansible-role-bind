@@ -1,0 +1,64 @@
+---
+- name: install bind9
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - bind9
+
+#  Aqui debo crear las zonas
+- name: update /etc/bind/named.conf.local from template
+  template:
+    src: named.conf.local
+    dest: /etc/bind/named.conf.local
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart bind9
+
+#  Aqui debo crear las bd directa
+- name: create db.domain.com /etc/bind/
+  template:
+    src: db.domain.com
+    dest: /etc/bind/db.local
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart bind9
+
+#  Aqui se le cambia el nombre al archivo db
+- name: cambiar nombre del archivo
+  shell: mv /etc/bind/db.local /etc/bind/db.{{server_domain}}
+
+
+#  Aqui debo crear las bd inversa
+- name: create db.reverso /etc/bind/
+  template:
+    src: db.reverso
+    dest: /etc/bind/db.127
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart bind9
+
+#  Aqui se le cambia el nombre al archivo db
+- name: cambiar nombre del archivo
+  shell: mv /etc/bind/db.127 /etc/bind/db.{{server_reverso}}
+
+
+#  Aqui edito forwarders
+- name: update /etc/bind/named.conf.options from template
+  template:
+    src: named.conf.options
+    dest: /etc/bind/named.conf.options
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart bind9
+
+#  Aqui elimina el servicio
+
+ 
+

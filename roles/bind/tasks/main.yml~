@@ -1,0 +1,49 @@
+---
+- name: install bind9
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - bind9
+
+#  Aqui debo crear las zonas
+- name: update /etc/bind/named.conf.local from template
+  template:
+    src: named.conf.local
+    dest: /etc/bind/named.conf.local
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart bind9
+
+#  Aqui debo crear las bd directa
+- name: create db.domain.com /etc/bind/
+  template:
+    src: db.domain.com
+    dest: /etc/bind/db.domain.com
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart bind9
+
+#  Aqui debo crear las bd inversa
+- name: create db.0.0.127 /etc/bind/
+  template:
+    src: db.0.0.127
+    dest: /etc/bind/db.0.0.127
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart bind9
+
+#  Aqui edito forwarders
+- name: update /etc/bind/named.conf.options from template
+  template:
+    src: named.conf.options
+    dest: /etc/bind/named.conf.options
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+  - restart bind9

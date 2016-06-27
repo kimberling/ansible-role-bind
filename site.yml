@@ -1,0 +1,9 @@
+---
+- name: Install DNS Server
+  hosts: all
+  sudo: yes
+
+  roles:
+    - basic
+    - bind
+  

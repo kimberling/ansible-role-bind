@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: KHernandez
+  description: Instalación Bind para debian
+  license: AGPL
+  min_ansible_version: 1.0
+  platforms:
+  - name: Debian
+    versions:
+    - jessie
+    - squeeze
+    - wheezy
+  galaxy_tags:
+  - system
+dependencies: []
