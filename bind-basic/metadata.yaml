@@ -1,0 +1,7 @@
+name: dns
+summary: "Servicio de dns"
+maintainer: Equipo de Desarrollo de Canaima GNU/Linux <desarrolladores@canaima.softwarelibre.gob.ve>
+description: |
+ Es un servicio de dns.
+components:
+  1: bind9
