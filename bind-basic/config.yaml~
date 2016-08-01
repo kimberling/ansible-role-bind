@@ -5,10 +5,28 @@ options:
     description: Dominio del servidor de DNS
     type: string
 
+  server_mail:
+    name: Dominio del servidor de correo
+    default: mail.domain.com
+    description: Dominio del servidor de correo de la institución
+    type: string
+
+  server_reverso:
+    name: Nombre del archivo del dns reverso
+    default: reverso
+    description: Nombre del archivo del dns reverso
+    type: string
+
   name_server_domain:
     name: Nombre del servidor de dns
     default: domain
-    description: Nombre del servidor de dns
+    description: Nombre del servidor de dns reverso
+    type: string
+
+  name_server_1:
+	name: Nombre de servidor1 
+    default: caracas
+    description: Nombre de servidor1
     type: string
 
   server_ip_ns:
@@ -17,28 +35,16 @@ options:
     description: Ip del servidor DNS
     type: string
 
-  server_mail:
-    name: Dominio del servidor de correo
-    default: mail.domain.com
-    description: Dominio del servidor de correo de la institución
-    type: string
-
-  name_server_mail:
-    name: Nombre del servidor de correo
-    default: mail
-    description: Nombre del servidor de dns correo
-    type: string
-
   server_ip_mail:
     name: Ip del servidor de correo 
     default: 127.0.0.4
     description: Ip del servidor de correo de la institución
     type: string
 
-  server_reverso:
-    name: Nombre del archivo del dns reverso
-    default: reverso
-    description: Nombre del archivo del dns reverso
+  server_ip_1:
+    name: Ip del servidor1 
+    default: 127.0.0.5
+    description: Ip del servidor de correo de la institución
     type: string
 
 update:
@@ -48,34 +54,10 @@ update:
     description: Dominio del servidor de DNS
     type: string
 
-  name_server_domain:
-    name: Nombre del servidor de dns
-    default: domain
-    description: Nombre del servidor de dns
-    type: string
-
-  server_ip_ns:
-    name: Ip del servidor dns 
-    default: 127.0.0.1
-    description: Ip del servidor DNS
-    type: string
-
   server_mail:
     name: Dominio del servidor de correo
     default: mail.domain.com
     description: Dominio del servidor de correo de la institución
-    type: string
-
-  name_server_mail:
-    name: Nombre del servidor de correo
-    default: mail
-    description: Nombre del servidor de dns correo
-    type: string
-
-  server_ip_mail:
-    name: Ip del servidor de correo 
-    default: 127.0.0.4
-    description: Ip del servidor de correo de la institución
     type: string
 
   server_reverso:
@@ -84,10 +66,28 @@ update:
     description: Nombre del archivo del dns reverso
     type: string
 
+  name_server_domain:
+    name: Nombre del servidor de dns
+    default: domain
+    description: Nombre del servidor de dns reverso
+    type: string
+
   name_server_1:
-    name: Nombre de servidor1 
+	name: Nombre de servidor1 
     default: caracas
     description: Nombre de servidor1
+    type: string
+
+  server_ip_ns:
+    name: Ip del servidor dns 
+    default: 127.0.0.1
+    description: Ip del servidor DNS
+    type: string
+
+  server_ip_mail:
+    name: Ip del servidor de correo 
+    default: 127.0.0.4
+    description: Ip del servidor de correo de la institución
     type: string
 
   server_ip_1:
@@ -95,8 +95,6 @@ update:
     default: 127.0.0.5
     description: Ip del servidor de correo de la institución
     type: string
-
-
 
 query:
   bind:

@@ -1,10 +1,41 @@
 ---
+
+# Instalar paquete ******************************
+# Aqui verifico si el paquete base esta instalado
+# shell: permite correr comandos de consola
+# register: contiene la variable init que la misma almacena el resulto arrojado por dpkg -l
+# when: quiere decir cuando se ejecute la accion 'Instalar'
+- name: check bind9 packages are install
+  shell: dpkg -l | grep bind9 | cut -d " " -f1
+  register: init
+  when: action == 'Instalar'
+
+# Aqui instala bind9
+# Apt es el modulo que te permite instalar paquetes de debian con el comando 'apt'
+# state: latest -> ultima versión
+# with_items -> funciona como un for verifica la cantidad de paquetes en 'pkg: {{ item }}' y los instala 
+# when: quiere decir cuando se ejecute la accion 'Instalar'
+# changed and init.stdout: la salida de la variable init si es == "" (Igual a vacio) se realiza una accion y lo instala 
 - name: install bind9
-  apt: pkg={{ item }} state=latest
+  apt:
+    pkg: "{{ item }}"
+    state: latest
   with_items:
-    - bind9
+  - bind9
+  when: init|changed and init.stdout == "" and action == 'Instalar'
+
+#  Creando las zonas ******************************
+#  Aqui debo consultar el archivo named.conf.local en /etc/bind 
+#  shell: permite verificar si el archivo se encuentra en /bind con el comando find cuando le den al boton instalar
+#  when: quiere decir cuando se ejecute la accion 'Instalar' 
+- name: check named.conf.local file in /etc/bind 
+  shell: find /etc/bind -name named.conf.local
+  register: init
+  when: action == 'Instalar'
 
 #  Aqui debo crear las zonas
+#  when: quiere decir cuando se ejecute la accion 'Instalar' 
+#  changed and init.stdout: la salida de la variable init si es != "" (Diferente a vacio) en la acción instalar
 - name: update /etc/bind/named.conf.local from template
   template:
     src: named.conf.local
@@ -14,38 +45,69 @@
     mode: 0755
   notify:
   - restart bind9
+  when: init|changed and init.stdout != "" and action == "Instalar"
+
+#  Creando las bd directa ******************************
+#  Aqui debo consultar el archivo db.local en /etc/bind 
+#  shell: permite verificar si el archivo se encuentra en /bind con el comando find cuando le den al boton instalar 
+- name: check db.local file in /etc/bind 
+  shell: find /etc/bind -name db.local
+  register: init
+  when: action == 'Instalar'
 
 #  Aqui debo crear las bd directa
-- name: create db.domain.com /etc/bind/
+- name: create db.local /etc/bind/
   template:
-    src: db.domain.com
+    src: db.local
     dest: /etc/bind/db.local
     owner: root
     group: root
     mode: 0755
   notify:
   - restart bind9
+  when: init|changed and init.stdout != "" and action == "Instalar"
 
-#  Aqui se le cambia el nombre al archivo db
+#  Aqui se le cambia el nombre al archivo db.local por el asignado en server_domain
+#  registre: cbd -> variable que se usara en las condiciones when en las consulta antes de ingresar o modificar cualquier dato del archivo db.{{server_domain}}
+#  when: quiere decir cuando se ejecute la accion 'Instalar'
+#  changed and init.stdout: la salida de la variable init si es !== "" (diferente a vacio) se realiza una accion y lo instala
 - name: cambiar nombre del archivo
   shell: mv /etc/bind/db.local /etc/bind/db.{{server_domain}}
+  registre: cbd
+  when: init|changed and init.stdout != "" and action == "Instalar"
 
+#  Creando las bd inversa ******************************
+#  Aqui debo consultar el archivo db.127 en /etc/bind 
+#  shell: permite verificar si el archivo se encuentra en /bind con el comando find cuando le den al boton instalar 
+- name: check db.127 file in /etc/bind 
+  shell: find /etc/bind -name db.127
+  register: init
+  when: action == 'Instalar'
 
 #  Aqui debo crear las bd inversa
-- name: create db.reverso /etc/bind/
+- name: create db.127 /etc/bind/
   template:
-    src: db.reverso
+    src: db.127
     dest: /etc/bind/db.127
     owner: root
     group: root
     mode: 0755
   notify:
   - restart bind9
+  when: init|changed and init.stdout != "" and action == "Instalar"
 
 #  Aqui se le cambia el nombre al archivo db
 - name: cambiar nombre del archivo
   shell: mv /etc/bind/db.127 /etc/bind/db.{{server_reverso}}
+  when: init|changed and init.stdout != "" and action == "Instalar"
 
+#  Editando forwarders ******************************
+#  Aqui debo consultar el archivo named.conf.options en /etc/bind 
+#  shell: permite verificar si el archivo se encuentra en /bind con el comando find cuando le den al boton instalar 
+- name: check named.conf.options file in /etc/bind 
+  shell: find /etc/bind -name named.conf.options
+  register: init
+  when: action == 'Instalar'
 
 #  Aqui edito forwarders
 - name: update /etc/bind/named.conf.options from template
@@ -57,16 +119,162 @@
     mode: 0755
   notify:
   - restart bind9
+  when: init|changed and init.stdout != "" and action == "Instalar"
 
-#  Aqui elimina el servicio
-- name: main | uninstall bind packages
-  apt: >
-    pkg={{ item }} 
-    state=absent
-    purge=yes
-    force=yes
+
+# MODULO ELIMINAR BIND ******************************  Eliminar paquete ******************************
+# Aqui verifico si el paquete base esta instalado
+# shell: permite correr comandos de consola
+# register: contiene la variable init que la misma almacena el resulto arrojado por dpkg -l
+- name: check bind9 packages are install
+  shell: dpkg -l | grep bind9 | cut -d " " -f1
+  register: init
+  when: action == 'Desintalar'
+
+# Aqui elimina el servicio
+# Apt es el modulo que te permite instalar paquetes de debian con el comando 'apt'
+# state: latest -> ultima versión
+# with_items -> funciona como un for verifica la cantidad de paquetes en 'pkg: {{ item }}' y los instala 
+# when: cuando 
+# changed and init.stdout: la salida de la variable init si es == "bind9" se realiza una accion y lo Desinstala 
+- name: main | uninstall bind9
+  apt:
+    pkg: "{{ item }}"
+    state: absent
+    purge: yes
+    force: yes
   with_items:
     - bind9*
-  sudo: no
- 
+  when: init|changed and init.stdout != "" and action == "Desintalar"
+
+
+
+
+
+
+# MODULO INSERTAR 
+
+# SERVER DNS2 - IP DNS ****************************** Ingresar un nuevo nombre e ip extra de servidor dns ******************************
+# Ingresar una nuevo servidor de dns ******************************
+# Aqui consulto si el nombre del servidor existe en el archivo /etc/bind/db.{{server_domain}}
+# Aqui verifico si la ip del servidor existe en el archivo /etc/bind/db.{{server_domain}}
+# register 'insertdns2': contiene la variable insertdns2 que la misma almacena el resulto arrojado por egrep '(name_server_domain)' /etc/bind/db.{{server_domain}}
+
+- name: check name and ip dns server
+  shell: egrep '({{name_server_domain2}}|{{server_ip_ns2}})' /etc/bind/db.{{server_domain}}
+  register: insertdns2
+  when: action == "Insertar New Server DNS 2"
+
+# Aqui Inserto el nombre del servidor nuevo en el archivo /etc/bind/db.{{server_domain}}
+# when: quiere decir cuando se ejecute la accion 'Insertar'
+# changed and init.stdout: la salida de la variable cbd si es == "" (igual a vacio) se realiza una accion y lo instala
+
+- name: insert name dns server
+  shell: sed -i '52a {{name_server_domain2}}                 IN  A   {{server_ip_ns2}}' /etc/bind/db.{{server_domain}}
+  when: insertdns2|changed and insertdns2.stdout == "" and action == 'Insertar New Server DNS 2'
+
+
+# Ingresar una nueva ip de servidor extra de servidor dns ******************************
+# Aqui Inserto la ip del servidor nuevo en el archivo /etc/bind/db.{{server_domain}} - MUESTRA LA UBICACION DE LOS SERVIDORES DNS
+# when: quiere decir cuando se ejecute la accion 'Insertar'
+# changed and init.stdout: la salida de la variable insertdns2 si es !== "" (diferente a vacio) se realiza una accion y lo instala
+
+- name: insert ip dns server
+  shell: sed -i '37a ns                      IN  A   {{server_ip_ns2}}' /etc/bind/db.{{server_domain}}
+  when: insertdns2|changed and insertdns2.stdout == "" and action == 'Insertar New Server DNS 2'
+
+
+
+# MODULO ACTUALIZAR 
+
+# SERVIDOR DE CORREO ****************************** Remplazar nombre de servidor de correo | registro mx | configuracion ******************************
+# Aqui Se modifican el nombre e ip del servidor mail nuevo en el archivo /etc/bind/db.{{server_domain}}
+
+- name: check name mail server
+  shell: egrep '({{server_mail}}|{{name_server_mail}})' /etc/bind/db.{{server_domain}}
+  register: servmail
+
+- name: remplece registro mx
+  shell: sed -i '26 s|@						IN	MX	{{server_mail}}|@						IN	MX	{{server_mail}}' /etc/bind/db.{{server_domain}}
+  when: servmail|changed and servmail.stdout != "" and action == "Actualizar Server Mail"
+
+- name: remplece registro mx
+  shell: sed -i '27 s|{{server_mail}}			IN	A	{{server_ip_mail}}|{{server_mail}}			IN	A	{{server_ip_mail}}' /etc/bind/db.{{server_domain}}
+  when: servmail|changed and servmail.stdout != "" and action == "Actualizar Server Mail"
+
+- name: remplace config server mail
+  shell: sed -i '31 s|{{name_server_mail}}					IN	A	{{server_ip_mail}}|{{name_server_mail}}					IN	A	{{server_ip_mail}}' /etc/bind/db.{{server_domain}}
+  when: servmail|changed and servmail.stdout != "" and action == "Actualizar Server Mail"
+
+
+
+
+# SERVIDOR DE DNS2 ****************************** Ingresar un nuevo nombre de servidor ******************************
+# Aqui Se modifican el nombre e ip del servidor dns2 nuevo en el archivo /etc/bind/db.{{server_domain}}
+
+- name: check name dns server
+  shell: egrep '({{name_server_domain2}}|{{server_ip_ns2}})' /etc/bind/db.{{server_domain}}
+  register: updateservdns2
+  when: action == "Insertar New Server DNS 2"
+
+- name: remplece registro server domain2 
+  shell: sed -i '51a {{name_server_domain2}}                IN  A   {{server_ip_ns2}}' /etc/bind/db.{{server_domain}}
+  when: updateservdns2|changed and updateservdns2.stdout !== "" and action == 'Insertar New Server DNS 2'
+
+- name: insert name dns server
+  shell: sed -i '37a ns                      IN  A   {{server_ip_ns2}}' /etc/bind/db.{{server_domain}}
+  when: updateservdns2|changed and updateservdns2.stdout !== "" and action == 'Insertar New Server DNS 2'
+
+
+
+# SERVIDOR DE DNS1 ****************************** Ingresar un nuevo nombre de servidor ******************************
+# Aqui Se modifican el nombre e ip del servidor dns1 nuevo en el archivo /etc/bind/db.{{server_domain}}
+
+- name: check name server dns1
+  shell: egrep '({{server_domain}}|{{name_server_domain}})' /etc/bind/db.{{server_domain}}
+  register: updateservdns
+  when: action == 'Actrualizar New Server DNS 1'
+
+- name: remplece registro server domain 
+  shell: sed -i '5 s|@	IN	SOA	 ns.{{server_domain}}. root.{{server_domain}}. (|@	IN	SOA	 ns.{{server_domain}}. root.{{server_domain}}. (' /etc/bind/db.{{server_domain}}
+  when: updateservdns|changed and updateservdns.stdout !== "" and action == 'Actrualizar New Server DNS 1'
+
+- name: remplece registro server domain
+  shell: sed -i '50 s|{{name_server_domain}}                 IN  A   {{server_ip_ns}}|{{name_server_domain}}                 IN  A   {{server_ip_ns}} (' /etc/bind/db.{{server_domain}}
+  when: updateservdns|changed and updateservdns.stdout !== "" and action == 'Actrualizar New Server DNS 1'
+
+- name: remplece registro server domain
+  shell: sed -i '36 s|ns						IN	A	{{server_ip_ns}}|ns						IN	A	{{server_ip_ns}} (' /etc/bind/db.{{server_domain}}
+  when: updateservdns|changed and updateservdns.stdout !== "" and action == 'Actrualizar New Server DNS 1'
+
+
+
+
+# MODULO INSERTAR SOA ****************************** Ingresar un nuevo nombre soa ******************************
+# Aqui consulta el SOA : Este es registro de recursos de inicio de autoridad, es la mejor fuente de información para los datos de este dominio
+# shell: egrep '(; Serial)' /etc/bind/db.{{server_domain}} Permite buscar ; Serial dentro del archivo /etc/bind/db.{{server_domain}}
+# register: andres : es la variable que almacenara el resultado que arroje el egrep del shell
+# changed and init.stdout: la salida de la variable juan si es !== "" (diferente a vacio) y se realiza la accion Insertar o Borrar o Actualizar Server Mail Insertar New Server DNS 2
+
+- name: check SOA dns server
+  shell: egrep '(; Serial)' /etc/bind/db.{{server_domain}}
+  register: andres
+
+# Aqui inserto el dia y los cambios que se realizaron en el documento db
+
+- name: capta date for SOA dns server
+  shell: date +%y\%m\%d
+  register: juan
+  when: init|changed and init.stdout != "" and action == 'Instalar' or action == 'Insertar New Server DNS 2' or action == 'Actualizar Server Mail'
+
+- name: remplece al instalar por primera vez el SOA dns server
+  shell: sed -i '6 s| 				      2		; Serial| 				      {juan}		; Serial' /etc/bind/db.{{server_domain}}
+  when: init|changed and init.stdout != "" and action == "Instalar"
+
+- name: remplace date for SOA dns server con cada cambio que se haga en el dns
+  shell: sed -i '6a 				      {juan}		; Serial' /etc/bind/db.{{server_domain}}
+  when: juan|changed and juan.stdout !== "" and action == 'Borrar' or action == 'Insertar New Server DNS 2' or action == 'Actrualizar New Server DNS 1' or action == 'Actualizar Server Mail'
+
+
+
 
