@@ -1,35 +1,8 @@
 ---
-
-# Instalar paquete ******************************
-# Aqui verifico si el paquete base esta instalado
-# shell: permite correr comandos de consola
-# register: contiene la variable init que la misma almacena el resulto arrojado por dpkg -l
-- name: check bind9 packages are install
-  shell: dpkg -l | grep bind9 | cut -d " " -f1
-  register: init
-  when: action == 'Instalar'
-
-# Aqui instala bind9
-# Apt es el modulo que te permite instalar paquetes de debian con el comando 'apt'
-# state: latest -> ultima versión
-# with_items -> funciona como un for verifica la cantidad de paquetes en 'pkg: {{ item }}' y los instala 
-# when: cuando 
-# changed and init.stdout: la salida de la variable init si es == "" se realiza una accion y lo instala 
 - name: install bind9
-  apt:
-    pkg: {{ item }} 
-    state: latest
+  apt: pkg={{ item }} state=latest
   with_items:
     - bind9
-  when: init|changed and init.stdout == "" and action == 'Instalar'
-
-#  Creando las zonas ******************************
-#  Aqui debo consultar el archivo named.conf.local en /etc/bind 
-#  shell: permite verificar si el archivo se encuentra en /bind con el comando find cuando le den al boton instalar 
-- name: check named.conf.local file in /etc/bind 
-  shell: find /etc/bind -name named.conf.local
-  register: init
-  when: action == 'Instalar'
 
 #  Aqui debo crear las zonas
 - name: update /etc/bind/named.conf.local from template
@@ -41,60 +14,28 @@
     mode: 0755
   notify:
   - restart bind9
-  when: init|changed and init.stdout != "" and action == "Instalar"
-
-#  Creando las bd directa ******************************
-
-#  Aqui debo consultar el archivo db.local en /etc/bind 
-#  shell: permite verificar si el archivo se encuentra en /bind con el comando find cuando le den al boton instalar 
-- name: check db.local file in /etc/bind 
-  shell: find /etc/bind -name db.local
-  register: init
-  when: action == 'Instalar'
 
 #  Aqui debo crear las bd directa
-- name: create db.local /etc/bind/
+- name: create db.domain.com /etc/bind/
   template:
-    src: db.local
-    dest: /etc/bind/db.local
+    src: db.domain.com
+    dest: /etc/bind/db.domain.com
     owner: root
     group: root
     mode: 0755
   notify:
   - restart bind9
-  when: init|changed and init.stdout != "" and action == "Instalar"
-
-#  Aqui se le cambia el nombre al archivo db.local por el asignado en server_domain
-- name: cambiar nombre del archivo
-  shell: mv /etc/bind/db.local /etc/bind/db.{{server_domain}}
-  when: init|changed and init.stdout != "" and action == "Instalar"
-
-#  Creando las bd inversa ******************************
-#  Aqui debo consultar el archivo db.127 en /etc/bind 
-#  shell: permite verificar si el archivo se encuentra en /bind con el comando find cuando le den al boton instalar 
-- name: check db.127 file in /etc/bind 
-  shell: find /etc/bind -name db.127
-  register: init
-  when: action == 'Instalar'
 
 #  Aqui debo crear las bd inversa
-- name: create db.127 /etc/bind/
+- name: create db.0.0.127 /etc/bind/
   template:
-    src: db.127
-    dest: /etc/bind/db.127
+    src: db.0.0.127
+    dest: /etc/bind/db.0.0.127
     owner: root
     group: root
     mode: 0755
   notify:
   - restart bind9
-  when: init|changed and init.stdout != "" and action == "Instalar"
-
-#  Aqui se le cambia el nombre al archivo db
-- name: cambiar nombre del archivo
-  shell: mv /etc/bind/db.127 /etc/bind/db.{{server_reverso}}
-  when: init|changed and init.stdout != "" and action == "Instalar"
-
-#  Editando forwarders ******************************
 
 #  Aqui edito forwarders
 - name: update /etc/bind/named.conf.options from template
@@ -106,28 +47,3 @@
     mode: 0755
   notify:
   - restart bind9
-
-# Eliminar paquete ******************************
-# Aqui verifico si el paquete base esta instalado
-# shell: permite correr comandos de consola
-# register: contiene la variable init que la misma almacena el resulto arrojado por dpkg -l
-- name: check bind9 packages are install
-  shell: dpkg -l | grep bind9 | cut -d " " -f1
-  register: init
-  when: action == 'Desintalar'
-
-# Aqui elimina el servicio
-# Apt es el modulo que te permite instalar paquetes de debian con el comando 'apt'
-# state: latest -> ultima versión
-# with_items -> funciona como un for verifica la cantidad de paquetes en 'pkg: {{ item }}' y los instala 
-# when: cuando 
-# changed and init.stdout: la salida de la variable init si es == "bind9" se realiza una accion y lo Desinstala 
-- name: main | uninstall bind9
-  apt:
-    pkg: {{ item }} 
-    state: absent
-    purge: yes
-    force: yes
-  with_items:
-    - bind9*
-  when: init|changed and init.stdout != "" and action == 'Desintalar'

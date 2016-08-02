@@ -5,16 +5,16 @@ options:
     description: Dominio del servidor de DNS
     type: string
 
-  name_server_domain:
-    name: Nombre del servidor de dns
-    default: domain
-    description: Nombre del servidor de dns
+  server_domain2:
+    name: Dominio del servidor dns2
+    default: domain2.com
+    description: Dominio del servidor de DNS2
     type: string
 
-  server_ip_ns:
-    name: Ip del servidor dns 
-    default: 127.0.0.1
-    description: Ip del servidor DNS
+  server_domain3:
+    name: Dominio del servidor dns3
+    default: domain3.com
+    description: Dominio del servidor de DNS3
     type: string
 
   server_mail:
@@ -23,10 +23,64 @@ options:
     description: Dominio del servidor de correo de la institución
     type: string
 
-  name_server_mail:
-    name: Nombre del servidor de correo
-    default: mail
-    description: Nombre del servidor de dns correo
+  server_reverso:
+    name: Nombre del archivo del dns reverso
+    default: reverso
+    description: Nombre del archivo del dns reverso
+    type: string
+
+  name_server_domain:
+    name: Nombre del servidor de dns
+    default: domain
+    description: Nombre del servidor de dns reverso
+    type: string
+
+  name_server_domain2:
+	name: Nombre del servidor de dns2
+    default: domain2
+    description: Nombre del servidor de dns2
+    type: string
+
+  name_server_domain3:
+	name: Nombre del servidor de dns3
+    default: domain3
+    description: Nombre del servidor de dns3
+    type: string
+
+  name_server_1:
+	name: Nombre de servidor1 
+    default: caracas
+    description: Nombre de servidor1
+    type: string
+
+  name_server_2:
+	name: Nombre de servidor2
+    default: valencia
+    description: Nombre de servidor2
+    type: string
+
+  name_server_3:
+	name: Nombre de servidor3
+    default: maracay
+    description: Nombre de servidor3
+    type: string
+
+  server_ip_ns:
+    name: Ip del servidor dns 
+    default: 127.0.0.1
+    description: Ip del servidor DNS
+    type: string
+
+  server_ip_ns2:
+    name: Ip del servidor dns2 
+    default: 127.0.0.2
+    description: Ip del servidor DNS2
+    type: string
+
+  server_ip_ns3:
+    name: Ip del servidor dns3 
+    default: 127.0.0.3
+    description: Ip del servidor DNS3
     type: string
 
   server_ip_mail:
@@ -35,10 +89,58 @@ options:
     description: Ip del servidor de correo de la institución
     type: string
 
-  server_reverso:
-    name: Nombre del archivo del dns reverso
-    default: reverso
-    description: Nombre del archivo del dns reverso
+  server_ip_1:
+    name: Ip del servidor1 
+    default: 127.0.0.5
+    description: Ip del servidor de correo de la institución
+    type: string
+
+  server_ip_2:
+    name: Ip del servidor2 
+    default: 127.0.0.6
+    description: Ip del servidor de correo de la institución
+    type: string
+
+  server_ip_3:
+    name: Ip del servidor3 
+    default: 127.0.0.7
+    description: Ip del servidor de correo de la institución
+    type: string
+
+  name_mv1_server1: 
+    name: Nombre de la maquina 1 virtual del server1 
+    default: margarita
+    description: Nombre de la maquina virtual del server1
+    type: string
+
+  name_mv2_server1: 
+    name: Nombre de la maquina 2 virtual del server1 
+    default: roques
+    description: Nombre de la maquina virtual del server1
+    type: string
+
+  name_mv1_server2: 
+    name: Nombre de la maquina 1 virtual del server2 
+    default: tachira
+    description: Nombre de la maquina 1 virtual del server2
+    type: string
+
+  name_mv2_server2: 
+    name: Nombre de la maquina 2 virtual del server2 
+    default: merida
+    description: Nombre de la maquina 2 virtual del server2
+    type: string
+
+  name_mv1_server3: 
+    name: Nombre de la maquina 1 virtual del server3 
+    default: barinas
+    description: Nombre de la maquina 1 virtual del server3
+    type: string
+
+  name_mv2_server3: 
+    name: Nombre de la maquina 2 virtual del server3 
+    default: apure
+    description: Nombre de la maquina 2 virtual del server3
     type: string
 
 update:
@@ -48,16 +150,16 @@ update:
     description: Dominio del servidor de DNS
     type: string
 
-  name_server_domain:
-    name: Nombre del servidor de dns
-    default: domain
-    description: Nombre del servidor de dns
+  server_domain2:
+    name: Dominio del servidor dns2
+    default: domain2.com
+    description: Dominio del servidor de DNS2
     type: string
 
-  server_ip_ns:
-    name: Ip del servidor dns 
-    default: 127.0.0.1
-    description: Ip del servidor DNS
+  server_domain3:
+    name: Dominio del servidor dns3
+    default: domain3.com
+    description: Dominio del servidor de DNS3
     type: string
 
   server_mail:
@@ -66,10 +168,64 @@ update:
     description: Dominio del servidor de correo de la institución
     type: string
 
-  name_server_mail:
-    name: Nombre del servidor de correo
-    default: mail
-    description: Nombre del servidor de dns correo
+  server_reverso:
+    name: Nombre del archivo del dns reverso
+    default: reverso
+    description: Nombre del archivo del dns reverso
+    type: string
+
+  name_server_domain:
+    name: Nombre del servidor de dns
+    default: domain
+    description: Nombre del servidor de dns reverso
+    type: string
+
+  name_server_domain2:
+	name: Nombre del servidor de dns2
+    default: domain2
+    description: Nombre del servidor de dns2
+    type: string
+
+  name_server_domain3:
+	name: Nombre del servidor de dns3
+    default: domain3
+    description: Nombre del servidor de dns3
+    type: string
+
+  name_server_1:
+	name: Nombre de servidor1 
+    default: caracas
+    description: Nombre de servidor1
+    type: string
+
+  name_server_2:
+	name: Nombre de servidor2
+    default: valencia
+    description: Nombre de servidor2
+    type: string
+
+  name_server_3:
+	name: Nombre de servidor3
+    default: maracay
+    description: Nombre de servidor3
+    type: string
+
+  server_ip_ns:
+    name: Ip del servidor dns 
+    default: 127.0.0.1
+    description: Ip del servidor DNS
+    type: string
+
+  server_ip_ns2:
+    name: Ip del servidor dns2 
+    default: 127.0.0.2
+    description: Ip del servidor DNS2
+    type: string
+
+  server_ip_ns3:
+    name: Ip del servidor dns3 
+    default: 127.0.0.3
+    description: Ip del servidor DNS3
     type: string
 
   server_ip_mail:
@@ -78,26 +234,60 @@ update:
     description: Ip del servidor de correo de la institución
     type: string
 
-  server_reverso:
-    name: Nombre del archivo del dns reverso
-    default: reverso
-    description: Nombre del archivo del dns reverso
-    type: string
-
-  name_server_1:
-    name: Nombre de servidor1 
-    default: caracas
-    description: Nombre de servidor1
-    type: string
-
   server_ip_1:
     name: Ip del servidor1 
     default: 127.0.0.5
     description: Ip del servidor de correo de la institución
     type: string
 
+  server_ip_2:
+    name: Ip del servidor2 
+    default: 127.0.0.6
+    description: Ip del servidor de correo de la institución
+    type: string
 
+  server_ip_3:
+    name: Ip del servidor3 
+    default: 127.0.0.7
+    description: Ip del servidor de correo de la institución
+    type: string
 
+  name_mv1_server1: 
+    name: Nombre de la maquina 1 virtual del server1 
+    default: margarita
+    description: Nombre de la maquina virtual del server1
+    type: string
+
+  name_mv2_server1: 
+    name: Nombre de la maquina 2 virtual del server1 
+    default: roques
+    description: Nombre de la maquina virtual del server1
+    type: string
+
+  name_mv1_server2: 
+    name: Nombre de la maquina 1 virtual del server2 
+    default: tachira
+    description: Nombre de la maquina 1 virtual del server2
+    type: string
+
+  name_mv2_server2: 
+    name: Nombre de la maquina 2 virtual del server2 
+    default: merida
+    description: Nombre de la maquina 2 virtual del server2
+    type: string
+
+  name_mv1_server3: 
+    name: Nombre de la maquina 1 virtual del server3 
+    default: barinas
+    description: Nombre de la maquina 1 virtual del server3
+    type: string
+
+  name_mv2_server3: 
+    name: Nombre de la maquina 2 virtual del server3 
+    default: apure
+    description: Nombre de la maquina 2 virtual del server3
+    type: string
+    
 query:
   bind:
     package: bind9

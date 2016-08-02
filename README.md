@@ -35,4 +35,3 @@ License
 -------
 
 AGPL
-# ansible-dns

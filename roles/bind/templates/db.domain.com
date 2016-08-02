@@ -30,7 +30,8 @@ $TTL	604800
 
 ; Glue para los DNS : MUESTRA LA UBICACION DE LOS SERVIDORES DNS
 ns						IN	A	{{server_ip_ns}}
-
+;ns2						IN	A	{{server_ip_ns2}}
+;ns3						IN	A	{{server_ip_ns3}}
 
 
 ; IPV6
@@ -40,17 +41,27 @@ ns						IN	A	{{server_ip_ns}}
 : BASICA PARA LOS SERVIDORES
 
 {{name_server_domain}}					IN	A	{{server_ip_ns}}
+{{name_server_domain2}}					IN	A	{{server_ip_ns2}}
+{{name_server_domain3}}					IN	A	{{server_ip_ns3}}
 {{name_server_mail}}					IN	A	{{server_ip_mail}}
-
-
-
 {{name_server_1}}						IN	A	{{server_ip_1}}
+{{name_server_2}}						IN	A	{{server_ip_2}}
+{{name_server_3}}						IN	A	{{server_ip_3}}
 
 
+; CORRESPONDIENTES A SERVER 1
+{{name_mv1_server1}}					CNAME	{{name_server_1}}
+{{name_mv2_server1}}					CNAME	{{name_server_1}}
 
 
+; CORRESPONDIENTES A SERVER 2
+{{name_mv1_server2}}					CNAME	{{name_server_2}}
+{{name_mv2_server2}}					CNAME	{{name_server_2}}
 
 
+; CORRESPONDIENTES A SERVER 3
+{{name_mv1_server3}}					CNAME	{{name_server_3}}
+{{name_mv2_server3}}					CNAME	{{name_server_3}}
 
 
 
